@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-dashboard">
+            <div class="card-body">
+                <h5 class="card-title">Total Products</h5>
+                <h2 class="card-text">{{ total_products }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-dashboard">
+            <div class="card-body">
+                <h5 class="card-title">Low Stock Items</h5>
+                <h2 class="card-text">{{ low_stock_products.count }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h3>Inventory Forecast</h3>
+    {% if forecast_data %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Predicted Demand</th>
+                    <th>Current Stock</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in forecast_data %}
+                <tr>
+                    <td>{{ item.product }}</td>
+                    <td>{{ item.predicted_demand }}</td>
+                    <td>{{ item.current_stock }}</td>
+                    <td>
+                        {% if item.status == 'low' %}
+                        <span class="badge bg-danger">Low Stock</span>
+                        {% else %}
+                        <span class="badge bg-success">Adequate</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No forecast data available. Add products and sales records to generate forecasts.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

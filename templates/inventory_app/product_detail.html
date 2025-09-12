@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ product.name }}</h1>
+    <div>
+        <a href="{% url 'add_sale' product.id %}" class="btn btn-success">Record Sale</a>
+        <a href="{% url 'product_list' %}" class="btn btn-secondary">Back to Products</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card stock-{{ stock_status }}">
+            <div class="card-body">
+                <h5 class="card-title">Product Details</h5>
+                <p><strong>SKU:</strong> {{ product.sku }}</p>
+                <p><strong>Description:</strong> {{ product.description }}</p>
+                <p><strong>Current Stock:</strong> {{ product.current_stock }}</p>
+                <p><strong>Minimum Stock Level:</strong> {{ product.min_stock_level }}</p>
+                <p><strong>Cost Price:</strong> ${{ product.cost_price }}</p>
+                <p><strong>Selling Price:</strong> ${{ product.selling_price }}</p>
+                <p><strong>Status:</strong> 
+                    {% if stock_status == 'low' %}
+                    <span class="badge bg-danger">Low Stock</span>
+                    {% elif stock_status == 'risk' %}
+                    <span class="badge bg-warning">At Risk</span>
+                    {% else %}
+                    <span class="badge bg-success">Adequate</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">30-Day Forecast</h5>
+                {% if forecast_data %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Predicted Demand</th>
+                                <th>Confidence Range</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for forecast in forecast_data|slice:":7" %}
+                            <tr>
+                                <td>{{ forecast.date|date:"M d" }}</td>
+                                <td>{{ forecast.predicted_demand }}</td>
+                                <td>{{ forecast.confidence_low }} - {{ forecast.confidence_high }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% if forecast_data|length > 7 %}
+                            <tr>
+                                <td colspan="3" class="text-center">... and {{ forecast_data|length|add:"-7" }} more days</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>Not enough data to generate forecast. Record more sales to enable forecasting.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h4>Sales History</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Quantity Sold</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales_history|slice:":10" %}
+                <tr>
+                    <td>{{ sale.sale_date|date:"M d, Y" }}</td>
+                    <td>{{ sale.quantity_sold }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">No sales recorded yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if sales_history|length > 10 %}
+    <p class="text-center">Showing last 10 of {{ sales_history|length }} sales records</p>
+    {% endif %}
+</div>
+{% endblock %}
