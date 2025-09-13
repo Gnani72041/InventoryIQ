@@ -51,5 +51,3 @@ python manage.py migrate
 python manage.py runserver
 
 
-### Sales Forecast Dashboard
-![Sales Forecast Dashboard Screenshot](accounts/screenshots/Sales Forecast Dashboard.png)
