@@ -29,14 +29,27 @@
 git clone https://github.com/Gnani72041/InventoryIQ.git
 cd InventoryIQ/inventory-forecaster
 
+### 2️⃣ Create Virtual Environment & Install Dependencies
+```bash
+python -m venv venv
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Linux/Mac
+pip install -r requirements.txt
 
-## 🖼️ Screenshots
 
-### Login Page
-![Login Screenshot](accounts/screenshots/Login.png)
+### 3️⃣ Setup Environment Variables
+SECRET_KEY=your_secret_key_here
+DEBUG=True
 
-### Products Detail Page
-![Products Detail Screenshot](accounts/screenshots/Products detail.png)
+
+### 4️⃣ Apply Migrations
+python manage.py makemigrations
+python manage.py migrate
+
+
+### 5️⃣ Run the Development Server
+python manage.py runserver
+
 
 ### Sales Forecast Dashboard
 ![Sales Forecast Dashboard Screenshot](accounts/screenshots/Sales Forecast Dashboard.png)
